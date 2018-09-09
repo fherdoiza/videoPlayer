@@ -1,3 +1,23 @@
-<p>
-  home works!
-</p>
+<div class="d-flex justify-content-arround">
+  <div class="video-player m-2">
+    <video #video controls preload="metadata" style="width:100%;">
+      <source src="./assets/sintel.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+  </div>
+  <div class="card m-2 flex-fill">
+    <div class="card-header">
+      Clips
+    </div>
+    <div class="card-body">
+      <div #ssContainer>
+
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-link">+ Agregar Clip</button>
+    </div>
+  </div>
+
+</div>
+<canvas #canvas width="750px" height="540px" style="display:block;">
+</canvas>
