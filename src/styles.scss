@@ -1,6 +1,13 @@
+@import "~src/variables";
 @import "~bootstrap/scss/bootstrap";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-/* You can add global styles to this file, and also import other style files */
+/**** FIN GENERALES ****/
+.ng-touched.ng-invalid,
+.was-validated .ng-invalid {
+  @extend .is-invalid !optional;
+}
+
 .img-thumbnail {
   margin: 2px;
 }

@@ -1,23 +1,51 @@
 <div class="d-flex justify-content-arround">
   <div class="video-player m-2">
     <video #video controls preload="metadata" style="width:100%;">
-      <source src="./assets/sintel.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'>
+      <source [src]="videoSelected?.source" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
   </div>
   <div class="card m-2 flex-fill">
-    <div class="card-header">
-      Clips
+    <div class="card-header d-flex align-items-center">
+      <strong class="mr-auto">Clips</strong>
+      <button class="btn btn-link" (click)="addClip()">+ Agregar Clip</button>
     </div>
-    <div class="card-body">
-      <div #ssContainer>
-
+    <div class="card-body p-2">
+      <div #ssContainer class="d-flex flex-wrap">
+        <div class="card m-2" style="width: 200px">
+          <img class="card-img-top" src="./assets/fullVideo.png" alt="Clip">
+          <div class="card-body p-2">
+            <p class="card-text">
+              <strong>Video Completo</strong>
+              <br>
+              Inicio: 0 seg.
+              <br>
+              Fin: 52 seg.
+            </p>
+          </div>
+        </div>
+        <div class="card m-2" style="width: 200px" *ngFor="let clip of clips">
+          <!--<img class="card-img-top" [src]="clip.source" alt="Clip">-->
+          <div class="card-body p-2">
+            <p class="card-text">
+              <strong>{{clip.name}}</strong>
+              <br>
+              Inicio: {{clip.timeStart}} seg.
+              <br>
+              Fin: {{clip.timeEnd}} seg.
+            </p>
+            <div class="d-flex justify-content-between">
+              <button type="button" class="card-link btn btn-link" (click)="editClip(clip)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button type="button" class="card-link  btn btn-link text-danger" (click)="deleteClip(clip)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="card-footer">
-      <button class="btn btn-link">+ Agregar Clip</button>
-    </div>
   </div>
-
 </div>
 <canvas #canvas width="750px" height="540px" style="display:block;">
 </canvas>
