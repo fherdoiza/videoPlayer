@@ -50,7 +50,7 @@
       "debug",
       "info",
       "time",
-      "timeEnd",
+      "endTime",
       "trace"
     ],
     "no-construct": true,

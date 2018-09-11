@@ -21,8 +21,8 @@ export class ModalClipComponent implements OnInit {
   ngOnInit() {
     this.clipForm = this.formBuilder.group({
       name: [this.data && this.data.name ? this.data.name : null, [Validators.required]],
-      timeStart: [this.data && this.data.timeStart ? this.data.timeStart : null, [Validators.required]],
-      timeEnd: [this.data && this.data.timeEnd ? this.data.timeEnd : null, [Validators.required]],
+      startTime: [this.data && this.data.startTime ? this.data.startTime : null, [Validators.required]],
+      endTime: [this.data && this.data.endTime ? this.data.endTime : null, [Validators.required]],
       clipId: [this.data && this.data.clipId ? this.data.clipId : null, null]
     });
   }

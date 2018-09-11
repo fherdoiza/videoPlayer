@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { MatDialogModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -17,12 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatIconModule,
     MatDialogModule,
     FormsModule,
-    ReactiveFormsModule,
-    ModalDialogComponent
-  ],
-  declarations: [
-    ModalDialogComponent
-  ],
-  entryComponents: [ModalDialogComponent]
+    ReactiveFormsModule
+  ]
 })
 export class SharedModule { }
