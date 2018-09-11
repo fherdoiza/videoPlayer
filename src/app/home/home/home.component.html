@@ -62,6 +62,14 @@
         </div>
       </div>
     </div>
+    <div class="card-footer d-flex justify-content-center">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><button class="page-link" type="button" (click)="playAnotherClip(-1)">Anterior (a)</button></li>
+          <li class="page-item"><button class="page-link" type="button" (click)="playAnotherClip(1)">Siguiente (s)</button></li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </div>
 <canvas #canvas width="750px" height="540px" style="display:block;" class="d-none">

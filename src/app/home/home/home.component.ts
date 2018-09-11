@@ -118,5 +118,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
     isNew ? this.clipService.post(result) : this.clipService.put(result);
     this.setClips();
   }
+  // extra
+  playAnotherClip(nextOrPrev) {
+    let actualClip;
+    if (this.videoSelected.clipId === 'complete' && nextOrPrev > 0 && this.clips.length > 0) {
+      actualClip = this.clips[0];
+    } else {
+      const index = this.clips.indexOf(this.videoSelected);
+      if (index >= 0 && index <= this.clips.length - 1) {
+        actualClip = (index + nextOrPrev) < 0 ? this.videoComplete : this.clips[index + nextOrPrev];
+      }
+    }
+    if (actualClip) {
+      this.playClip(actualClip);
+    }
+  }
 
 }
