@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { VideoClip } from '../models/video-clip';
 
 @Injectable({
   providedIn: 'root'
@@ -6,15 +7,13 @@ import { Injectable } from '@angular/core';
 export class ClipService {
 
   constructor() { }
-  findAll() {
+  findAll(): Array<VideoClip> {
     let data = sessionStorage['clips'];
-    if (data && data !== 'undefined') {
-      data = JSON.parse(data);
-    }
+    (data && data !== 'undefined') ? data = JSON.parse(data) : data = [];
     return data;
   }
 
-  get(clipId) {
+  get(clipId): VideoClip {
     const data = sessionStorage[clipId];
     let value = null;
     if (data && data !== 'undefined') {

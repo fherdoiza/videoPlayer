@@ -16,10 +16,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('ssContainer') ssContainer: ElementRef;
   videoHeight = null;
   videoWidth;
-  drawTimer = null;
   originSourceVideo = './assets/sintel.mp4';
   clips: Array<VideoClip> = [];
   videoSelected: VideoClip;
+  prevClip = -1;
+  nextClip = 1;
+  showLoading = false;
 
   videoComplete: VideoClip = {
     clipId: 'complete',
@@ -41,6 +43,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.renderer.listen(this.video, 'loadedmetadata', (): void => {
       this.initScreenshot();
     });
+    this.renderer.listen(this.video, 'pause', (): void => {
+      this.canGoNextClip();
+    });
+
+    this.renderer.listen('document', 'keyup', (event) => {
+      if (event.keyCode === 37) {
+        this.playAnotherClip(this.prevClip);
+      }
+      if (event.keyCode === 39) {
+        this.playAnotherClip(this.nextClip);
+      }
+    });
   }
 
   ngOnInit() {
@@ -58,48 +72,36 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.canvas.height = this.videoHeight;
   }
 
-  startScreenshot() {
-    if (this.drawTimer == null) {
-      this.drawTimer = setInterval((): void => { this.grabScreenshot(); }, 1000);
-    }
-  }
-
-  stopScreenshot() {
-    if (this.drawTimer) {
-      clearInterval(this.drawTimer);
-      this.drawTimer = null;
-    }
-  }
-
-  grabScreenshot() {
+  grabScreenshot(): string {
     this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
     return this.canvas.toDataURL('image/png');
   }
   setClips() {
     this.clips = this.clipService.findAll();
+    this.clips.unshift(this.videoComplete);
   }
   addClip() {
     this.openModal(true, null);
   }
-  editClip(clip) {
+  editClip(clip: VideoClip) {
     this.openModal(false, clip);
   }
-  playClip(clip) {
+  playClip(clip: VideoClip) {
     this.videoSelected = clip;
     this.video.load();
     this.video.play();
   }
-  deleteClip(clip) {
+  deleteClip(clip: VideoClip) {
     this.clipService.delete(clip);
     this.setClips();
+    this.playClip(this.clips[0]);
   }
-  openModal(isNew, clip) {
+  openModal(isNew: boolean, clip: VideoClip) {
     setTimeout(() => {
       const dialogRef = this.dialog.open(ModalClipComponent, {
         data: isNew ? {} : clip,
         width: '500px'
       });
-
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           result.videoClip = this.originSourceVideo + '#t=' + result.startTime + ',' + result.endTime;
@@ -108,30 +110,37 @@ export class HomeComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             this.video.oncanplay = this.generateClip(isNew, result);
           }, 500);
-
         }
       });
     });
   }
-  generateClip(isNew, result) {
+  generateClip(isNew: boolean, result: any) {
     result.source = this.grabScreenshot();
     isNew ? this.clipService.post(result) : this.clipService.put(result);
     this.setClips();
   }
   // extra
   playAnotherClip(nextOrPrev) {
-    let actualClip;
-    if (this.videoSelected.clipId === 'complete' && nextOrPrev > 0 && this.clips.length > 0) {
-      actualClip = this.clips[0];
-    } else {
-      const index = this.clips.indexOf(this.videoSelected);
-      if (index >= 0 && index <= this.clips.length - 1) {
-        actualClip = (index + nextOrPrev) < 0 ? this.videoComplete : this.clips[index + nextOrPrev];
+    let actualClip, indexClip;
+    this.clips.forEach((actClip, ixdClip) => {
+      if (actClip.clipId === this.videoSelected.clipId) {
+        indexClip = ixdClip;
       }
+    });
+    if (indexClip >= 0 && indexClip < this.clips.length) {
+      actualClip = this.clips[indexClip + nextOrPrev];
     }
     if (actualClip) {
       this.playClip(actualClip);
     }
   }
-
+  canGoNextClip() {
+    if (this.video.currentTime >= this.videoSelected.endTime) {
+      this.showLoading = true;
+      setTimeout(() => {
+        this.showLoading = false;
+        this.playAnotherClip(this.nextClip);
+      }, 3000);
+    }
+  }
 }
