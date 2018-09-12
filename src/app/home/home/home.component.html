@@ -35,7 +35,7 @@
   <div class="card m-2 flex-fill">
     <div class="card-header d-flex align-items-center">
       <strong class="mr-auto">Clips</strong>
-      <button class="btn btn-link" (click)="addClip()">+ Agregar Clip</button>
+      <button class="btn btn-link" (click)="addClip()" *ngIf="canEditClip">+ Agregar Clip</button>
     </div>
     <div class="card-body p-2">
       <div #ssContainer class="d-flex flex-wrap">
@@ -50,13 +50,13 @@
               Fin: {{clip.endTime}} seg.
             </p>
             <div class="d-flex justify-content-center">
-              <button type="button" class="card-link btn btn-link" (click)="editClip(clip)" *ngIf="!isFirst">
+              <button type="button" class="card-link btn btn-link" (click)="editClip(clip)" *ngIf="!isFirst && canEditClip">
                 <mat-icon>edit</mat-icon>
               </button>
               <button type="button" class="card-link btn btn-link text-success" (click)="playClip(clip)">
                 <mat-icon>play_arrow</mat-icon>
               </button>
-              <button type="button" class="card-link  btn btn-link text-danger" (click)="deleteClip(clip)" *ngIf="!isFirst">
+              <button type="button" class="card-link  btn btn-link text-danger" (click)="deleteClip(clip)" *ngIf="!isFirst && canEditClip">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

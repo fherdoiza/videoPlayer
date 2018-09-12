@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { ModalClipComponent } from '../modal-clip/modal-clip.component';
 import { ClipService } from '../../shared/services/clip.service';
 import { VideoClip } from '../../shared/models/video-clip';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   prevClip = -1;
   nextClip = 1;
   showLoading = false;
+  canEditClip = false;
 
   videoComplete: VideoClip = {
     clipId: 'complete',
@@ -36,7 +38,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private renderer: Renderer2,
     public dialog: MatDialog,
-    private clipService: ClipService
+    private clipService: ClipService,
+    private route: ActivatedRoute
   ) { }
 
   ngAfterViewInit() {
@@ -58,6 +61,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.route.data.subscribe(data => {
+      this.canEditClip = data && data.canEditClip ? true : false;
+    });
     this.video = this.elementRef.nativeElement.querySelector('video');
     this.canvas = this.elementRef.nativeElement.querySelector('canvas');
     this.ctx = this.canvas.getContext('2d');
